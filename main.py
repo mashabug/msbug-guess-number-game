@@ -1,35 +1,48 @@
-
+#Number Guessing Game Objectives:
+from art import logo
 import random
-print("Welcome to the Number Guessing Game!")
-print("I'm thinking of a number between 1 and 100.")
 
-number = random.randint(1, 100)
-print(number)
-
-score = input("Choose a difficulty. Type 'easy' or 'hard':\n").lower()
-if score == 'easy':
-  score = 10
-else:
-  score = 5
-
-end_of_game = False
-while not end_of_game:
-  print(f"You have {score} attempts remaining to guess the number.")
-  guess = int(input("Make a guess: "))
-  
-  if guess != number:
-    if guess > number:
-      print("Too high.")
-    elif guess < number:
-      print("Too low.")
-    score -= 1
+EASY = 10
+HARD = 5
+#Function to check user's guess against actual answer.
+def check_answer(guess, answer, tier):
+  if guess > answer:
+    print("Too high")
+    return tier -1
+  if guess < answer:
+    print("Too low")
+    return tier - 1
   else:
-    if guess == number:
-      end_of_game = True
-      print("You got it! The answer was {}.".format(number))
+    print("You got it! The answer is {}".format(answer))
+
+#Make function to set difficulty.
+def difficulty():
+  level = input("Choose your difficulty level. Type 'easy' or 'hard'.\n").lower()
+  if level == 'easy':
+    return EASY
+  if level == 'hard':
+    return HARD
+
+def game():
+  print(logo)
+  #Choosing a random number between 1 and 100.
+  print("Welcome to the Number Guessing Game!")
+  print("I'm thinking of a number between 1 and 100.")
+  answer = random.randint(1, 100)
+  print(answer)
   
-  if score != 0 and guess != number:
-    print("Guess again.")  
-  elif score == 0:
-    end_of_game = True
-    print("You lost. The number was {}.".format(number))
+  tier = difficulty()
+ 
+  #Repeat the guessing functionality if they get it wrong.
+  guess = 0
+  while guess != answer:
+    print("You have {} attempts to guess.".format(tier))
+    guess = int(input("Make your guess: "))
+    tier = check_answer(guess, answer, tier)
+    if tier == 0:
+      print("You are out of guess.")
+      return
+    elif guess != answer:
+      print("Guess again.")
+    
+game()
